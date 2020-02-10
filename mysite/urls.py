@@ -26,4 +26,5 @@ urlpatterns = [
     path('logout/', views.logout),
     path('confirm/', views.user_confirm),
     path('captcha/', include('captcha.urls')),
+    path('refresh_captcha/', views.refresh_captcha),
 ]
