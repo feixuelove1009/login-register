@@ -1,10 +1,17 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.conf import settings
-from . import models
-from . import forms
-import hashlib
 import datetime
+import hashlib
+
+from captcha.helpers import captcha_image_url
+from captcha.models import CaptchaStore
+from django.conf import settings
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+
+from . import forms
+from . import models
+
+
 # Create your views here.
 
 
@@ -23,7 +30,6 @@ def make_confirm_string(user):
 
 
 def send_email(email, code):
-
     from django.core.mail import EmailMultiAlternatives
 
     subject = '来自www.liujiangblog.com的注册确认邮件'
@@ -61,7 +67,7 @@ def login(request):
 
             try:
                 user = models.User.objects.get(name=username)
-            except :
+            except:
                 message = '用户不存在！'
                 return render(request, 'login/login.html', locals())
 
@@ -162,5 +168,12 @@ def user_confirm(request):
         return render(request, 'login/confirm.html', locals())
 
 
-
-
+def refresh_captcha(request):
+    if not request.is_ajax():
+        return HttpResponse(status=404)
+    new_key = CaptchaStore.generate_key()
+    to_json_response = {
+        'key':       new_key,
+        'image_url': captcha_image_url(new_key),
+    }
+    return JsonResponse(to_json_response)
