@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}{% static 'css/edit.css' %}{% endblock css %}
+{% block 标题 %}优先级{% endblock 标题 %}
+{% block content %}
+<br>
+<form id="form-edit" method="POST" action="">
+    {% csrf_token %}
+    <div class="from-group">
+        <label for="editTodo"></label>
+        <input name="level" class="form-control form-control-lg" id="editTodo" type="text" value="{{level}}">
+        <small id="help" class="form-text text-muted">在这里编辑优先级</small>
+    </div>
+    {% if 警告 %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong><center>{{ 警告 }}</center></strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary btn-lg btn-block">提交</button>
+</form>
+{% endblock content %}

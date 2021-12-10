@@ -15,7 +15,7 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     sex = models.CharField(max_length=32, choices=gender, default='男')
     c_time = models.DateField(auto_now_add=True)
-    has_confirmed = models.BooleanField(default=False)
+    has_confirmed = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

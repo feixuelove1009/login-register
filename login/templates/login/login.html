@@ -18,11 +18,11 @@
             <div class="col">
               <form class="form-login" action="/login/" method="post">
 
-                  {% if login_form.captcha.errors %}
+                  {% comment %} {% if login_form.captcha.errors %}
                     <div class="alert alert-warning">{{ login_form.captcha.errors }}</div>
                   {% elif message %}
                       <div class="alert alert-warning">{{ message }}</div>
-                  {% endif %}
+                  {% endif %} {% endcomment %}
 
                   {% csrf_token %}
 
@@ -36,14 +36,14 @@
                       {{ login_form.password.label_tag }}
                       {{ login_form.password }}
                   </div>
-                  <div class="form-group">
+                  {% comment %} <div class="form-group">
                       {{ login_form.captcha.label_tag }}
                       {{ login_form.captcha }}
-                  </div>
+                  </div> {% endcomment %}
 
                   <div>
-                  <a href="/register/" class="text-success"><ins>新用户注册</ins></a>
-                  <button type="submit" class="btn btn-primary float-right">登录</button>
+                  {% comment %} <a href="/register/" class="text-success"><ins>新用户注册</ins></a> {% endcomment %}
+                  <button type="submit" class="btn-lg btn-block btn-info float-md-none">登录</button>
                 </div>
               </form>
             </div>

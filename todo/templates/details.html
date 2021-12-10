@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}{% static 'css/edit.css' %}{% endblock css %}
+{% block 标题 %}详细内容{% endblock 标题 %}
+{% block content %}
+<br>
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="from-group">
+        <label for="editTodo"></label>
+        <textarea class="form-control" rows="10" name="已修改详细内容">{{ 待修改详细内容 }}</textarea>
+        {% comment %} <input name="已修改详细内容" class="form-control form-control-lg" id="editTodo" type="text"> {% endcomment %}
+        <small id="help" class="form-text text-muted">在这里编辑详细内容</small>
+    </div>
+    {% if 警告 %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong><center>{{ 警告 }}</center></strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary btn-lg btn-block">提交</button>
+</form>
+{% endblock content %}

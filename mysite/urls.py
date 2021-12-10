@@ -16,14 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
-from login import views
+import login.urls
+import todo.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.index),
-    path('login/', views.login),
-    path('register/', views.register),
-    path('logout/', views.logout),
-    path('confirm/', views.user_confirm),
-    path('captcha/', include('captcha.urls')),
+    path('', include(login.urls)),
+    path('todo/', include(todo.urls)),
 ]

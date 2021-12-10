@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+{% comment %} {% block css %}{% static 'css/home.css' %}{% endblock css %} {% endcomment %}
+{% block content %}
+{% comment %} {% if 警告 %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+<strong><center>{{ 警告 }}</center></strong>
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+{% endif %}
+{% if 信息 %}
+<div class="alert alert-primary alert-dismissible fade show" role="alert">
+<strong><center>{{ 信息 }}</center></strong>
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+{% endif %} {% endcomment %}
+
+<div class ="table-responsive">
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>序号</th>
+        <th>待办事项</th>
+        <th>优先级</th>
+        <th>编辑</th>
+        <th>划掉</th>
+        <th>删除</th>
+      </tr>
+    </thead>
+    <tbody class="no-underline">
+    {% for i in 清单 %}
+      {% if i.done %}
+        </tr>
+          <tr class="table-dark">
+          <th class="text-dark" scope="row">{{ forloop.counter }}</th>
+          <td class="text-dark" id="line-through">{{ i.thing }}</td>
+          <td class="text-dark" id="line-through">{{i.level}}</td>
+          <td class="text-secondary">不可编辑</td>
+          <td>
+            <form method="POST" action="{% url 'todo:划掉' i.id %}">
+            {% csrf_token %}
+            <input name="完成状态" type="hidden" value="未完成">
+            <button type="submit" class="btn btn-primary btn-sm">撤销</button>
+            </form>
+          </td>
+          <td>            
+            <form method="POST" action="{% url 'todo:删除' i.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">删除</button>
+            </form>
+          </td>
+        </tr> 
+      {% else %}
+        <tr>
+          <th class="text-dark" scope="row">{{ forloop.counter }}</th>
+          <td>
+            <a href="{% url 'todo:详细内容' i.id %}">
+            {{i.thing}}
+            </a>
+          </td>
+          <td>            
+            <a href="{% url 'todo:优先级' i.id %}">
+            <button type ="submit" class = "btn btn-primary btn-sm">{{i.level}}</button>
+           </a>
+          </td>
+          <td>
+            <a href="{% url 'todo:编辑' i.id %}">
+              <button type ="submit" class = "btn btn-primary btn-sm">编辑</button>
+            </a>
+          </td>
+          <td>
+            <form method="POST" action="{% url 'todo:划掉' i.id %}">
+            {% csrf_token %}
+            <input name="完成状态" type="hidden" value="已完成">
+            <button type="submit" class="btn btn-primary btn-sm">划掉</button>
+            </form>
+          </td>
+          <td>
+
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal{{forloop.counter}}">删除</button>
+
+            <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModal{{forloop.counter}}Label" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal{{forloop.counter}}Label">请确认</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                  确定要删除：<strong>未办事项 {{ i.thing }}</strong> 吗？
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"> 取消</button>
+                  <form method="POST" action="{% url 'todo:删除' i.id %}">
+                    {% csrf_token %}       
+                  <button type="submit" class="btn btn-primary">确认</button>
+                  </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      
+      {% endif %}
+
+    {% endfor %}
+    <button type="button" class="btn btn-danger my-2 my-sm-0" style="float:right" data-toggle="modal" data-target="#modellevel">+</button>
+
+    <div class="modal fade" id="modellevel" tabindex="-1" role="dialog" aria-labelledby="modellevelLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modellevelLabel">请确认</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <div class="modal-body">
+            <form method="POST" action="{% url 'todo:主页' %}" enctype="multipart/form-data">
+              <input name='thing' class="form-control mr-sm-2" type="text" placeholder='待办事项'>
+              <input name='level' class="form-control mr-sm-2" type="text" placeholder='优先级'>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"> 取消</button>    
+              <button type="submit" class="btn btn-primary">确认</button>
+              {% csrf_token %}   
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+</div>
+<br><br>
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
